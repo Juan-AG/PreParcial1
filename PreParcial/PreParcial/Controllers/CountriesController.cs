@@ -4,6 +4,9 @@ using PreParcial.Domain.Interfaces;
 
 namespace PreParcial.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")] //Esta es la primera parte de la URL de esta API: URL = api/countries
+
     public class CountriesController : Controller
     {
         private readonly ICountryService _countryService;
@@ -14,7 +17,8 @@ namespace PreParcial.Controllers
 
         //En un controlador los métodos cambian de nombre, y realmente se llaman ACCIONES (ACTIONS) - Si es una API, se denomina ENDPOINT.
         //Todo Endpoint retorna un ActionResult, significa que retorna el resultado de una ACCIÓN.
-
+        [HttpGet, ActionName("Get")]
+        [Route("Get")] //Aquí concateno la URL inicial: URL = api/countries/get
         public async Task<ActionResult<IEnumerable<Country>>> GetCountriesAsync()
         {
             var countries = await _countryService.GetCountriesAsync(); //Aquí estoy yendo a mi capa de Domain para traerme la lista de países
