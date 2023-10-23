@@ -32,5 +32,32 @@ namespace PreParcial.Controllers
 
             return Ok(countries); //Ok = 200 Http Status Code
         }
+
+        [HttpPost, ActionName("Create")]
+        [Route("Create")]
+        public async Task<ActionResult> CreateCountryAsync(Country country)
+        {
+            try
+            {
+                var createdCountry = await _countryService.CreateCountryAsync(country);
+
+                if (createdCountry == null)
+                {
+                    return NotFound(); //NotFound = 404 Http Status Code
+                }
+
+                return Ok(createdCountry); //Retorne un 200 y el objeto Country
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.Contains("duplicate"))
+                {
+                    return Conflict(String.Format("El país {0} ya existe.", country.Name)); //Confilct = 409 Http Status Code Error
+                }
+
+                return Conflict(ex.Message);
+            }
+        }
+
     }
 }
